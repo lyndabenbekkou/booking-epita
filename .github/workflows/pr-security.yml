@@ -1,3 +1,4 @@
+---
 name: pr-security
 on:
   pull_request:
@@ -14,6 +15,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Run OSV Scanner after PR
         uses: google/osv-scanner-action/osv-scanner-action@c51854704019a247608d928f370c98740469d4b5
@@ -41,8 +44,8 @@ jobs:
         uses: google/osv-scanner-action/osv-reporter-action@c51854704019a247608d928f370c98740469d4b5
         with:
           scan-args: |-
-            --new before.sarif
-            --old after.sarif
+            --new after.sarif
+            --old before.sarif
             --output diff.sarif
         continue-on-error: true
 
@@ -60,6 +63,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Run Semgrep differential
         run: |
@@ -75,3 +80,4 @@ jobs:
         with:
           name: semgrep-diff
           path: semgrep-diff.sarif
+          
